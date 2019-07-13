@@ -14,8 +14,26 @@
       </span>
       {{ with .Params.Author }}<span class="post-author">::
         {{ . }}</span>{{ end }}
+      {{with .Params.Status}}
+      {{$message := .}}
+      {{$color := "red"}}
+      {{if eq . "completed"}}
+        {{$color = "success"}}
+      {{else if eq . "updating"}}
+        {{$color = "orange"}}
+      {{else}}
+        {{$color = "lightgrey"}}
+        {{$message = "editing"}}
+      {{end}}
+      <div style="display: inline-block; vertical-align: middle; height:auto;">
+        <img src="https://img.shields.io/badge/status-{{$message}}-{{$color}}.svg">
+      </div>
+      {{else}}
+      <div style="display: inline-block; vertical-align: middle; height:auto;">
+        <img src="https://img.shields.io/badge/status-draft-yellow.svg">
+      </div>
+      {{end}}
     </div>
-
     {{ if .Params.tags }}
     <span class="post-tags">
       {{ range .Params.tags }}
