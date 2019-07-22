@@ -1,9 +1,70 @@
+<!--
+  Self Define CSS
+-->
+<style>
+  .nav-guide {
+    background-color:chocolate;;;
+    width:70px;
+    height:40px;
+    text-align: center;
+    vertical-align: middle;
+    cursor:pointer;
+  }
+  .nav-guide:hover {
+    background-color:darkcyan;
+  }
+  .nav-guide a {
+    line-height: 40px;
+    text-decoration: none;
+    color:white;
+  }
+  .library-nav {
+    list-style-type:none;
+    margin:0px;
+    display: none;
+  }
+  .library-item-name {
+    line-height:40px;
+  }
+  .library-nav li {
+    background-color:darkslategray;
+    width:70px;
+    height:40px;
+    text-align:left;
+    padding-left:10px;
+    padding-right:10px;
+    z-index:300;
+  }
+  .library-sub-item {
+    line-height:40px;
+  }
+  li.nav-guide.library-nav-guide:hover ul {
+    display: block;
+  }
+</style>
 <nav class="menu">
   <ul class="menu__inner menu__inner--desktop">
     {{ if or $.Site.Params.showMenuItems ( eq .Site.Params.showMenuItems 0 ) }}
       {{ range first $.Site.Params.showMenuItems $.Site.Menus.main }}
         {{ if not .HasChildren }}
-          <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+          {{if (ne .Identifier "library")}}
+            <li class="nav-guide"><a  href="{{ .URL }}">{{ .Name }}</a></li>
+          {{else}}
+            <li class="nav-guide library-nav-guide">
+                <span class="library-item-name">{{.Name}}</span>
+                {{with $.Site.Params.menu.lib}}
+                  <ul class="library-nav">
+                    {{range .}}
+                      <li>
+                        <a href="{{(urlize .url) | absLangURL}}" class="library-sub-item">
+                          {{.name}}
+                        </a>
+                      </li>
+                    {{end}}
+                  </ul>
+                {{end}}
+            </li>
+          {{end}}
         {{ end }}
       {{ end }}
       {{ if gt (len $.Site.Menus.main) $.Site.Params.showMenuItems }}
